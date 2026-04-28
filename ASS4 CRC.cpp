@@ -1,7 +1,22 @@
 #include <iostream>
 using namespace std;
 
-string xorOperation(string a, string b) {
+// Convert character to binary (8-bit)
+string charToBinary(char ch) {
+    string bin = "";
+    int val = ch;
+
+    for (int i = 7; i >= 0; i--) {
+        if (val & (1 << i))
+            bin += '1';
+        else
+            bin += '0';
+    }
+    return bin;
+}
+
+// XOR operation
+string xorOp(string a, string b) {
     string result = "";
     for (int i = 1; i < b.length(); i++) {
         if (a[i] == b[i])
@@ -12,71 +27,77 @@ string xorOperation(string a, string b) {
     return result;
 }
 
-string divide(string dividend, string divisor) {
-    int pick = divisor.length();
-    string temp = dividend.substr(0, pick);
+// CRC Division
+string crcDivide(string data, string key) {
+    int k = key.length();
+    string temp = data.substr(0, k);
 
-    while (pick < dividend.length()) {
-
+    for (int i = k; i < data.length(); i++) {
         if (temp[0] == '1')
-            temp = xorOperation(divisor, temp) + dividend[pick];
+            temp = xorOp(key, temp) + data[i];
         else
-            temp = xorOperation(string(pick, '0'), temp) + dividend[pick];
-
-        pick++;
+            temp = xorOp(string(k, '0'), temp) + data[i];
     }
 
     if (temp[0] == '1')
-        temp = xorOperation(divisor, temp);
+        temp = xorOp(key, temp);
     else
-        temp = xorOperation(string(pick, '0'), temp);
+        temp = xorOp(string(k, '0'), temp);
 
     return temp;
 }
 
 int main() {
-    string data, generator;
+    int choice;
+    string data;
 
-    cout << "Enter Data: ";
-    cin >> data;
-
-    cout << "Enter Generator: ";
-    cin >> generator;
-
-    int g = generator.length();
-
-    // Sender Side
-    string appended = data + string(g - 1, '0');
-    string remainder = divide(appended, generator);
-
-    string codeword = data + remainder;
-
-    cout << "\nSender Side" << endl;
-    cout << "CRC Remainder: " << remainder << endl;
-    cout << "Transmitted Codeword: " << codeword << endl;
-
-    // Ask user if Error should be introduced or not
-    string choice;
-    cout << "\nDo you want to introduce error? (yes/no): ";
+    cout << "1. Enter Binary Data\n2. Enter Character\nChoice: ";
     cin >> choice;
 
-    string received;
-    if (choice == "yes" || choice == "Yes") {
-        cout << "Enter Received Codeword with Error: ";
-        cin >> received;
+    if (choice == 2) {
+        char ch;
+        cout << "Enter character: ";
+        cin >> ch;
+        data = charToBinary(ch);
+        cout << "Binary of " << ch << " = " << data << endl;
     } else {
-        received = codeword;
+        cout << "Enter binary data: ";
+        cin >> data;
     }
 
-    // Receiver Side
-    string check = divide(received, generator);
+    string key;
+    cout << "Enter generator polynomial (e.g. 1011 or 10011): ";
+    cin >> key;
 
-    cout << "\nReceiver Side" << endl;
+    int k = key.length();
+
+    // Append zeros
+    string appended = data + string(k - 1, '0');
+
+    // Get remainder
+    string remainder = crcDivide(appended, key);
+
+    // Transmitted data
+    string transmitted = data + remainder;
+
+    cout << "\nTransmitted Data: " << transmitted << endl;
+
+    // Introduce error
+    int pos;
+    cout << "Enter position to introduce error: ";
+    cin >> pos;
+
+    transmitted[pos - 1] = (transmitted[pos - 1] == '0') ? '1' : '0';
+
+    cout << "Received Data: " << transmitted << endl;
+
+    // Check error
+    string check = crcDivide(transmitted, key);
 
     if (check.find('1') != string::npos)
-        cout << "Error detected in received data." << endl;
+        cout << "Error detected\n";
     else
-        cout << "No error detected. Data received correctly." << endl;
+        cout << "No error detected\n";
 
     return 0;
 }
