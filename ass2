@@ -1,0 +1,71 @@
+i) Commands to Verify & Troubleshoot Network Configuration and Connectivity
+🔹 On Router
+show ip interface brief
+
+→ Checks interface status (up/down)
+
+show running-config
+
+→ Verifies configuration
+
+show ip route
+
+→ Displays routing table
+
+ping <destination IP>
+
+→ Tests connectivity
+
+show cdp neighbors
+
+→ Shows directly connected devices
+
+🔹 On PC
+ipconfig
+
+→ Displays IP configuration
+
+ping <destination IP>
+
+→ Tests connectivity between hosts
+
+✅ (ii) Route Discovery, Hostname & Address Resolution
+🔹 Route Discovery
+tracert <destination IP>     (on PC)
+traceroute <destination IP> (on Router)
+
+→ Shows path taken by packets (hop-by-hop)
+
+🔹 Address Resolution (ARP)
+arp -a        (PC)
+show ip arp   (Router)
+
+→ Maps IP address to MAC address
+
+🔹 Hostname Resolution
+ping <hostname>
+
+→ Resolves hostname to IP (if configured)
+
+nslookup <domain>
+
+→ Queries DNS server
+
+✅ (iii) Commands to View Active Connections & Ports
+🔹 On PC
+netstat
+
+→ Shows active network connections
+
+netstat -an
+
+→ Displays all ports and their states
+
+🔹 On Router
+show tcp brief
+
+→ Shows active TCP connections
+
+show control-plane host open-ports
+
+→ Displays open ports on router
