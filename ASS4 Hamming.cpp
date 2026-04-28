@@ -2,10 +2,37 @@
 #include <cmath>
 using namespace std;
 
+// Convert character to binary string (8-bit)
+string charToBinary(char ch) {
+    string bin = "";
+    int val = ch;
+
+    for (int i = 7; i >= 0; i--) {
+        if (val & (1 << i))
+            bin += '1';
+        else
+            bin += '0';
+    }
+    return bin;
+}
+
 int main() {
     string data;
-    cout << "Enter data bits : ";
-    cin >> data;
+    int choice;
+
+    cout << "1. Enter Binary Data\n2. Enter Character\nChoice: ";
+    cin >> choice;
+
+    if (choice == 2) {
+        char ch;
+        cout << "Enter character: ";
+        cin >> ch;
+        data = charToBinary(ch);
+        cout << "Binary of " << ch << " = " << data << endl;
+    } else {
+        cout << "Enter binary data: ";
+        cin >> data;
+    }
 
     int m = data.length();
     int r = 0;
@@ -17,32 +44,30 @@ int main() {
     int total = m + r;
     int h[100];
 
-    cout << "\nNumber of parity bits required: " << r << endl;
+    cout << "\nParity bits required: " << r << endl;
 
     int j = 0, k = 0;
     for (int i = 1; i <= total; i++) {
-        if (pow(2, j) == i) {
-            h[i] = 0; 
+        if (i == pow(2, j)) {
+            h[i] = 0;
             j++;
         } else {
             h[i] = data[k++] - '0';
         }
     }
 
-    cout << "\nPositions: ";
-    for (int i = 1; i <= total; i++) cout << i << " ";
-    
-    cout << "\nInitial (with parity positions): ";
-    for (int i = 1; i <= total; i++) cout << h[i] << " ";
+    cout << "\nInitial code: ";
+    for (int i = 1; i <= total; i++) cout << h[i];
 
     cout << "\n\nCalculating Parity Bits:\n";
+
     for (int i = 0; i < r; i++) {
         int pos = pow(2, i);
         int sum = 0;
 
-        for (int k = 1; k <= total; k++) {
-            if ((k >> i) & 1) {
-                sum += h[k];
+        for (int j = 1; j <= total; j++) {
+            if (j & pos) {
+                sum += h[j];
             }
         }
 
@@ -54,52 +79,44 @@ int main() {
     for (int i = 1; i <= total; i++) cout << h[i];
     cout << endl;
 
+    // Receiver side
     cout << "\n--- Receiver Side ---";
-    cout << "\n1. Introduce Error\n2. No Error\nEnter choice: ";
+    cout << "\nEnter received code: ";
 
-    int choice;
-    cin >> choice;
+    string received;
+    cin >> received;
 
     int rcv[100];
 
-    if (choice == 1) {
-        string received;
-        cout << "Enter received code: ";
-        cin >> received;
-
-        for (int i = 1; i <= total; i++) {
-            rcv[i] = received[i - 1] - '0';
-        }
-    } else {
-        for (int i = 1; i <= total; i++) {
-            rcv[i] = h[i];
-        }
+    for (int i = 1; i <= total; i++) {
+        rcv[i] = received[i - 1] - '0';
     }
 
     int errorPos = 0;
 
     for (int i = 0; i < r; i++) {
+        int pos = pow(2, i);
         int sum = 0;
 
-        for (int k = 1; k <= total; k++) {
-            if ((k >> i) & 1) {
-                sum += rcv[k];
+        for (int j = 1; j <= total; j++) {
+            if (j & pos) {
+                sum += rcv[j];
             }
         }
 
         if (sum % 2 != 0) {
-            errorPos += pow(2, i);
+            errorPos += pos;
         }
     }
 
     if (errorPos == 0) {
-        cout << "\nNo error detected in received code.\n";
+        cout << "\nNo error detected\n";
     } else {
-        cout << "\nError detected at position: " << errorPos << endl;
+        cout << "\nError at position: " << errorPos << endl;
 
-        rcv[errorPos] = (rcv[errorPos] == 0) ? 1 : 0;
+        rcv[errorPos] ^= 1;
 
-        cout << "✔ Corrected Code: ";
+        cout << "Corrected Code: ";
         for (int i = 1; i <= total; i++) cout << rcv[i];
         cout << endl;
     }
