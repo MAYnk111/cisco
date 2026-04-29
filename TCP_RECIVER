@@ -1,0 +1,43 @@
+#include <iostream>
+#include <fstream>
+#include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib")
+using namespace std;
+
+int main() {
+    WSADATA ws;
+    WSAStartup(MAKEWORD(2,2), &ws);
+
+    SOCKET serverSocket, clientSocket;
+    sockaddr_in serverAddr, clientAddr;
+    int clientSize = sizeof(clientAddr);
+
+    char buffer[1024];
+    int bytesReceived;
+
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(8080);
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+
+    bind(serverSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
+    listen(serverSocket, 1);
+
+    cout << "TCP Server waiting...\n";
+
+    clientSocket = accept(serverSocket, (sockaddr*)&clientAddr, &clientSize);
+
+    ofstream file("received_tcp_file", ios::binary);
+
+    while ((bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0) {
+        file.write(buffer, bytesReceived);
+    }
+
+    cout << "File received successfully!\n";
+
+    file.close();
+    closesocket(clientSocket);
+    closesocket(serverSocket);
+    WSACleanup();
+}
