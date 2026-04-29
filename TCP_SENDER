@@ -1,0 +1,37 @@
+#include <iostream>
+#include <fstream>
+#include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib")
+using namespace std;
+
+int main() {
+    WSADATA ws;
+    WSAStartup(MAKEWORD(2,2), &ws);
+
+    SOCKET sock;
+    sockaddr_in serverAddr;
+
+    char buffer[1024];
+
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(8080);
+    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    connect(sock, (sockaddr*)&serverAddr, sizeof(serverAddr));
+
+    ifstream file("send_file", ios::binary);
+
+    while (!file.eof()) {
+        file.read(buffer, sizeof(buffer));
+        int bytes = file.gcount();
+        send(sock, buffer, bytes, 0);
+    }
+
+    cout << "File sent successfully!\n";
+
+    file.close();
+    closesocket(sock);
+    WSACleanup();
+}
