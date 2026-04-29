@@ -1,0 +1,127 @@
+ip.addr == 192.168.1.54
+
+👉 Shows all packets where this IP is involved (source OR destination)
+
+2️⃣
+ip.src == 23.38.50.202
+
+👉 Displays packets sent FROM this IP
+
+3️⃣
+ip.dst == 18.97.36.74
+
+👉 Displays packets sent TO this IP
+
+4️⃣
+tcp
+
+👉 Shows only TCP packets (reliable communication)
+
+5️⃣
+udp
+
+👉 Shows only UDP packets (fast but unreliable)
+
+6️⃣
+dns
+
+👉 Displays DNS queries and responses (domain → IP)
+
+7️⃣
+icmpv6
+
+👉 Shows IPv6 ping packets (used for testing connectivity)
+
+8️⃣
+tcp.port == 80
+
+👉 Shows traffic on port 80 (HTTP)
+
+9️⃣
+tcp.port == 443
+
+👉 Shows traffic on port 443 (HTTPS encrypted)
+
+🔟
+frame.len > 100
+
+👉 Displays packets with size greater than 100 bytes
+
+1️⃣1️⃣
+ip.proto == 6
+
+👉 Protocol number 6 = TCP
+
+1️⃣2️⃣
+arp
+
+👉 Shows ARP packets (IP → MAC mapping)
+
+1️⃣3️⃣
+tcp.flags.fin == 1
+
+👉 Shows packets where connection is ending (FIN flag)
+
+1️⃣4️⃣
+http
+
+👉 Displays HTTP traffic (unencrypted web traffic)
+
+1️⃣5️⃣
+http.request
+
+👉 Shows only HTTP request packets (client → server)
+
+1️⃣6️⃣
+tcp.analysis.retransmission
+
+👉 Shows retransmitted packets → indicates network issue
+
+1️⃣7️⃣
+dns.flags.response == 0
+
+👉 Shows only DNS queries (client requests)
+
+1️⃣8️⃣
+ip.version == 6
+
+👉 Displays only IPv6 packets
+
+1️⃣9️⃣
+dns.qry.name contains "google"
+
+👉 Shows DNS queries containing “google”
+
+2️⃣0️⃣
+tcp.analysis.duplicate_ack
+
+👉 Shows duplicate ACKs → indicates packet loss
+
+🔥 BONUS (VERY IMPORTANT FOR VIVA)
+2️⃣1️⃣
+tcp.flags.syn == 1
+
+👉 Shows connection start (SYN packet)
+
+🎯 HOW TO EXPLAIN IN EXAM
+
+Say:
+
+“Wireshark filters are used to analyze specific types of network traffic. Display filters help isolate packets after capture, making analysis efficient.”
+
+⚡ QUICK GROUPING (IMPRESS EXAMINER)
+🔹 IP Filters
+ip.addr
+ip.src
+ip.dst
+🔹 Protocol Filters
+tcp
+udp
+dns
+http
+🔹 Port Filters
+tcp.port == 80
+tcp.port == 443
+🔹 Analysis Filters
+retransmission
+duplicate_ack
