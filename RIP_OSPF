@@ -1,0 +1,254 @@
+You’ve already built the network — now you just need to **explain + demonstrate RIP and OSPF properly**. I’ll give you exactly what to **say, configure, and show to the examiner**.
+
+---
+
+# 🎯 1. What the Question Wants
+
+* 3 routers (WAN) ✔
+* Each router → different LAN ✔
+* Use **dynamic routing**:
+
+  * RIP ✔
+  * OSPF ✔
+* Show connectivity using `ping` ✔
+
+---
+
+# 🧠 2. What is Dynamic Routing?
+
+> “Dynamic routing automatically learns and updates routes between routers.”
+
+---
+
+# 📌 3. RIP (Routing Information Protocol)
+
+## 🔹 Concept (Say this)
+
+> “RIP is a distance-vector routing protocol that uses hop count as a metric. Maximum hop count is 15.”
+
+---
+
+## 🔹 How it Works
+
+* Routers share routing tables every **30 seconds**
+* Chooses path with **least hops**
+
+---
+
+## 🔧 RIP Configuration (On ALL routers)
+
+```bash id="1nq2xl"
+configure terminal
+router rip
+version 2
+no auto-summary
+network 192.168.1.0
+network 192.168.2.0
+network 192.168.3.0
+network 10.0.0.0
+```
+
+👉 Each router should include:
+
+* Its LAN network
+* WAN network
+
+---
+
+## 🔍 How to SHOW RIP Working
+
+### 1. Routing Table
+
+```bash id="8f8btp"
+show ip route
+```
+
+👉 You should see:
+
+```text id="2ojk5u"
+R 192.168.2.0
+R 192.168.3.0
+```
+
+✔ `R = RIP working`
+
+---
+
+### 2. Test Connectivity
+
+```bash id="6q4p5j"
+ping 192.168.3.10
+```
+
+---
+
+### 3. Route Path
+
+```bash id="2jkm1y"
+tracert 192.168.3.10
+```
+
+---
+
+# 📌 4. OSPF (Open Shortest Path First)
+
+## 🔹 Concept (Say this)
+
+> “OSPF is a link-state routing protocol that uses cost (bandwidth) and calculates shortest path using Dijkstra algorithm.”
+
+---
+
+## 🔹 How it Works
+
+* Routers exchange **link-state information**
+* Builds full network map
+* Faster and more efficient than RIP
+
+---
+
+## 🔧 OSPF Configuration (On ALL routers)
+
+```bash id="b0z3ux"
+configure terminal
+router ospf 1
+network 192.168.1.0 0.0.0.255 area 0
+network 192.168.2.0 0.0.0.255 area 0
+network 192.168.3.0 0.0.0.255 area 0
+network 10.0.0.0 0.0.0.255 area 0
+```
+
+---
+
+# 🔍 How to SHOW OSPF Working
+
+### 1. Routing Table
+
+```bash id="y9g0sh"
+show ip route
+```
+
+👉 You should see:
+
+```text id="yo9y2j"
+O 192.168.2.0
+O 192.168.3.0
+```
+
+✔ `O = OSPF working`
+
+---
+
+### 2. Neighbor Check
+
+```bash id="a8k8v2"
+show ip ospf neighbor
+```
+
+✔ Shows connected routers
+
+---
+
+### 3. Ping Test
+
+```bash id="i9v8k0"
+ping 192.168.2.10
+```
+
+---
+
+# 🔥 5. HOW TO DEMONSTRATE (STEP-BY-STEP)
+
+## ✅ Demo Flow
+
+### Step 1 — Show Topology
+
+Say:
+
+> “Three routers connected via WAN, each with separate LAN.”
+
+---
+
+### Step 2 — Show RIP
+
+```bash id="2f6k7m"
+show ip route
+```
+
+Explain:
+
+> “Routes marked with R are learned via RIP.”
+
+---
+
+### Step 3 — Ping Test
+
+```bash id="3r5w2n"
+ping <other LAN>
+```
+
+---
+
+### Step 4 — Switch to OSPF
+
+Remove RIP:
+
+```bash id="j2n4xv"
+no router rip
+```
+
+Enable OSPF
+
+---
+
+### Step 5 — Show OSPF
+
+```bash id="l4p7bq"
+show ip route
+```
+
+Explain:
+
+> “Routes marked with O are learned via OSPF.”
+
+---
+
+### Step 6 — Show Neighbors
+
+```bash id="z7m1cq"
+show ip ospf neighbor
+```
+
+---
+
+# ⚖️ 6. RIP vs OSPF (VERY IMPORTANT)
+
+| Feature    | RIP             | OSPF       |
+| ---------- | --------------- | ---------- |
+| Type       | Distance Vector | Link State |
+| Metric     | Hop Count       | Cost       |
+| Speed      | Slow            | Fast       |
+| Max Hops   | 15              | Unlimited  |
+| Efficiency | Low             | High       |
+
+---
+
+# 🎤 FINAL VIVA LINE
+
+> “RIP uses hop count to select shortest path, while OSPF uses cost and provides faster convergence and better scalability.”
+
+---
+
+# 🎯 FINAL CHECKLIST
+
+✔ `show ip route` → R / O
+✔ `ping` works
+✔ `tracert` shows path
+✔ `show ip ospf neighbor` works
+
+---
+
+# 🚀 If you want next
+
+I can give:
+👉 **exact 3-router config (copy-paste ready)**
+👉 **perfect viva answers (1-liners)**
