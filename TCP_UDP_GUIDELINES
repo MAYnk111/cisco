@@ -1,0 +1,215 @@
+Alright — here’s a **clear, step-by-step guide (CMD-based)** to run **TCP and UDP file transfer** AND how to **explain both in viva/demo**.
+
+---
+
+# 🧭 🟢 BEFORE YOU START
+
+### 📁 Put all files in one folder:
+
+```
+tcp_server.cpp
+tcp_client.cpp
+udp_server.cpp
+udp_client.cpp
+send_file   (any file: txt/mp3/mp4)
+```
+
+---
+
+# 💻 🟦 HOW TO RUN TCP (STEP-BY-STEP)
+
+## 🔹 Step 1: Open CMD (Terminal 1)
+
+Go to your folder:
+
+```bash
+cd Desktop\your_folder_name
+```
+
+---
+
+## 🔹 Step 2: Compile TCP files
+
+```bash
+g++ tcp_server.cpp -o tcp_server
+g++ tcp_client.cpp -o tcp_client
+```
+
+---
+
+## 🔹 Step 3: Run Server FIRST
+
+```bash
+tcp_server
+```
+
+👉 Output:
+
+```text
+TCP Server waiting...
+```
+
+---
+
+## 🔹 Step 4: Open NEW CMD (Terminal 2)
+
+```bash
+cd Desktop\your_folder_name
+```
+
+---
+
+## 🔹 Step 5: Run Client
+
+```bash
+tcp_client
+```
+
+👉 Output:
+
+```text
+File sent successfully!
+```
+
+---
+
+## 🔹 Step 6: Check Server Window
+
+👉 You will see:
+
+```text
+File received successfully!
+```
+
+👉 File saved as:
+
+```text
+received_tcp_file
+```
+
+---
+
+# 💻 🟪 HOW TO RUN UDP (STEP-BY-STEP)
+
+## 🔹 Step 1: Compile
+
+```bash
+g++ udp_server.cpp -o udp_server
+g++ udp_client.cpp -o udp_client
+```
+
+---
+
+## 🔹 Step 2: Run UDP Server
+
+```bash
+udp_server
+```
+
+---
+
+## 🔹 Step 3: Open NEW CMD
+
+Run:
+
+```bash
+udp_client
+```
+
+---
+
+## 🔹 Step 4: Output
+
+Server:
+
+```text
+UDP File received!
+```
+
+Client:
+
+```text
+UDP File sent!
+```
+
+---
+
+# 🎯 🔥 DEMO FLOW (SHOW TO EXAMINER)
+
+## ✅ TCP Demo
+
+1. Run server
+2. Run client
+3. Show file received
+4. Say:
+
+> “TCP ensures reliable transfer using connection-oriented communication.”
+
+---
+
+## ✅ UDP Demo
+
+1. Run server
+2. Run client
+3. Show file received
+4. Say:
+
+> “UDP is faster but does not guarantee delivery.”
+
+---
+
+# 🧠 ⚖️ EXPLAIN DIFFERENCE (VERY IMPORTANT)
+
+| Feature     | TCP                 | UDP            |
+| ----------- | ------------------- | -------------- |
+| Type        | Connection-oriented | Connectionless |
+| Reliability | High                | Low            |
+| Speed       | Slower              | Faster         |
+| Used for    | File transfer       | Streaming      |
+
+---
+
+# 🎤 🔑 VIVA EXPLANATION (SAY THIS)
+
+### TCP:
+
+> “TCP establishes a connection using a handshake, ensures reliable and ordered data delivery, and is used for file transfer.”
+
+---
+
+### UDP:
+
+> “UDP sends data without establishing a connection, making it faster but unreliable, suitable for real-time applications.”
+
+---
+
+# ⚠️ COMMON ERRORS (IMPORTANT)
+
+| Error               | Fix                      |
+| ------------------- | ------------------------ |
+| Port already in use | Restart CMD              |
+| File not found      | Check `send_file` exists |
+| No connection       | Run server first         |
+
+---
+
+# 🚀 FINAL CHECKLIST
+
+✔ Server runs first
+✔ Client runs second
+✔ File received
+✔ Works for all file types
+
+---
+
+# 🔥 EXTRA (IMPRESS EXAMINER)
+
+Say:
+
+> “TCP guarantees delivery using acknowledgments, while UDP sacrifices reliability for speed.”
+
+---
+
+If you want:
+👉 I can give **2-PC setup (run between two laptops on WiFi)**
+👉 OR **advanced version with file name + progress bar (high marks)**
